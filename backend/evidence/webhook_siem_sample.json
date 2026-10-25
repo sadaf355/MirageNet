@@ -1,0 +1,21 @@
+{
+  "schema": "miragenet.siem.alert.v1",
+  "simulated": true,
+  "source": "MirageNet",
+  "event": {
+    "alert_id": "alr-demo-0001",
+    "severity": "low",
+    "title": "Synthetic decoy read",
+    "host_id": "WS-01",
+    "actor_id": "simulated-intruder",
+    "technique": "T1005",
+    "event_id": "evt-demo-0001",
+    "timestamp": "2026-01-01T00:00:00Z",
+    "evidence": {
+      "decoy_id": "decoy-demo-0001",
+      "token_reuse_detected": false,
+      "benign_allowlisted": false,
+      "simulated": true
+    }
+  }
+}

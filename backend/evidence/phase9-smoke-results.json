@@ -1,0 +1,57 @@
+{
+  "reset": {
+    "decoys_deployed": 60
+  },
+  "scenario_results": [
+    {
+      "scenario": "insider-data-theft",
+      "events_emitted": 3,
+      "alerts_emitted": 3,
+      "observed_detection_rate": 1.0,
+      "timeline_step_f1": 1.0,
+      "benign_high_severity_alerts": 0,
+      "time_to_first_alert_seconds": 0.010274
+    },
+    {
+      "scenario": "credential-lateral-movement",
+      "events_emitted": 3,
+      "alerts_emitted": 3,
+      "observed_detection_rate": 1.0,
+      "timeline_step_f1": 1.0,
+      "benign_high_severity_alerts": 0,
+      "time_to_first_alert_seconds": 0.005857
+    },
+    {
+      "scenario": "slow-scan-theft",
+      "events_emitted": 3,
+      "alerts_emitted": 3,
+      "observed_detection_rate": 1.0,
+      "timeline_step_f1": 1.0,
+      "benign_high_severity_alerts": 0,
+      "time_to_first_alert_seconds": 0.003977
+    },
+    {
+      "scenario": "benign-backup-noise",
+      "events_emitted": 3,
+      "alerts_emitted": 0,
+      "observed_detection_rate": null,
+      "timeline_step_f1": null,
+      "benign_high_severity_alerts": 0,
+      "time_to_first_alert_seconds": null
+    }
+  ],
+  "evaluation_measured": {
+    "runs_total": 4,
+    "malicious_runs": 3,
+    "benign_runs": 1,
+    "mean_observed_detection_rate": 1.0,
+    "event_level_precision": 1.0,
+    "event_level_recall": 1.0,
+    "timeline_step_f1": 1.0,
+    "benign_high_severity_alerts": 0,
+    "time_to_first_alert_seconds": null,
+    "enticement_top10_pass_rate": 1.0
+  },
+  "siem_export_verified": true,
+  "note": "Synthetic local API smoke evidence; not production telemetry."
+}

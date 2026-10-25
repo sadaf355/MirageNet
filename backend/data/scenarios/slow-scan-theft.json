@@ -1,0 +1,28 @@
+{
+  "scenario": "slow-scan-theft",
+  "source": "MirageNet synthetic ground truth",
+  "ordered": true,
+  "steps": [
+    {
+      "step_index": 0,
+      "event_type": "file_enumeration",
+      "host": "WEB-01",
+      "action": "enumerate",
+      "technique": "T1083"
+    },
+    {
+      "step_index": 1,
+      "event_type": "file_read",
+      "host": "FS-01",
+      "action": "read",
+      "technique": "T1005"
+    },
+    {
+      "step_index": 2,
+      "event_type": "file_read",
+      "host": "DB-01",
+      "action": "copy",
+      "technique": "T1074"
+    }
+  ]
+}

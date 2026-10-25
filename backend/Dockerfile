@@ -1,5 +1,4 @@
-# Build context must be the REPO ROOT (not the backend/ folder).
-# Render: dockerfilePath: Dockerfile  dockerContext: .
+# Standalone backend Dockerfile (supports build context: backend/ OR repo-root via root Dockerfile)
 FROM python:3.11-slim
 
 WORKDIR /app
@@ -8,14 +7,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install deps first (layer-cached until requirements.txt changes)
-COPY backend/requirements.txt /app/backend/requirements.txt
+# Install python dependencies
+COPY requirements.txt /app/backend/requirements.txt
 RUN pip install --no-cache-dir -r /app/backend/requirements.txt
 
-# Copy application code and bundled data from the repo root
-COPY backend /app/backend
-COPY data    /app/data
-COPY evidence /app/evidence
+# Copy backend application source and bundled data
+COPY . /app/backend
+
+# Ensure /app/data and /app/evidence exist in root /app for paths like /app/data/miragenet.db
+RUN if [ -d "/app/backend/data" ]; then cp -r /app/backend/data /app/data; else mkdir -p /app/data; fi \
+    && if [ -d "/app/backend/evidence" ]; then cp -r /app/backend/evidence /app/evidence; else mkdir -p /app/evidence; fi
 
 WORKDIR /app/backend
 

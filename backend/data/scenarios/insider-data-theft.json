@@ -1,0 +1,28 @@
+{
+  "scenario": "insider-data-theft",
+  "source": "MirageNet synthetic ground truth",
+  "ordered": true,
+  "steps": [
+    {
+      "step_index": 0,
+      "event_type": "file_read",
+      "host": "FS-01",
+      "action": "read",
+      "technique": "T1005"
+    },
+    {
+      "step_index": 1,
+      "event_type": "file_read",
+      "host": "FS-01",
+      "action": "copy",
+      "technique": "T1074"
+    },
+    {
+      "step_index": 2,
+      "event_type": "bulk_copy",
+      "host": "BKP-01",
+      "action": "stage",
+      "technique": "T1074"
+    }
+  ]
+}
