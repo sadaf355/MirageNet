@@ -5,13 +5,13 @@ MirageNet is a **sandbox-only cyber deception simulator**. It generates fictiona
 ## Requirements
 - Python 3.11 recommended
 - Node.js 20+ and npm
-- Optional: an Adaption API key for the official Adaption SDK. Without it, the labeled local cache is used.
+- Optional: an Adaption API key for the official Adaption SDK. Without it, the labelled local cache is used.
 
 ## Start the backend
 ```bash
 cd backend
 python -m venv .venv
-# Windows PowerShell: .venv\\Scripts\\Activate.ps1
+# Windows PowerShell: .venv\Scripts\Activate.ps1
 # macOS/Linux: source .venv/bin/activate
 pip install -r requirements.txt
 uvicorn app.main:app --reload
@@ -63,43 +63,73 @@ Framer Motion provides page and path transitions. The interface respects the OS 
 
 The full-demo runner sends scenario requests to the local simulator API. All actions remain synthetic; the terminal does not execute shell commands and topology edges are not claims of observed real traffic.
 
-
-## Phase 6–8 correctness notes
+## Correctness notes
 
 - Evaluation normalizes `ground_truth_label` (`positive`/`negative`) into `malicious`/`benign`; this prevents recorded runs from silently disappearing from Evaluation Lab.
 - Timeline F1 is calculated by ordered matching of persisted events against `data/scenarios/*.json`, requiring event type, host, and ATT&CK technique agreement. Benign runs have no positive timeline F1 and are shown as `n/a`.
 - Sensor HTTP responses expose measured request/response duration in the `X-Sensor-Latency-Seconds` response header. This is local simulator endpoint latency, not production network latency.
-- `backend/tests/test_phase8_acceptance.py` asserts the three malicious scenario detection targets (100%), ordered timeline F1 (>= 0.90), zero benign high-severity alerts, latency header presence, and ground-truth normalization.
 - `evidence/webhook_siem_sample.json` is an illustrative synthetic JSON export shape; it is not an active webhook delivery configuration.
-- Decoy enticement is now fit across the full batch of decoys plus eight attacker-style queries, so the TF-IDF vocabulary and similarities are corpus-based rather than independently fit per template.
-
-## Phase 9: correctness, reset, and SIEM export
-
+- Decoy enticement is fit across the full batch of decoys plus eight attacker-style queries, so the TF-IDF vocabulary and similarities are corpus-based rather than independently fit per template.
 - `POST /api/reset` clears synthetic events, alerts, incidents, sessions, and old decoys, then creates and deploys a fresh 60-decoy demo inventory while retaining the seven-host topology.
-- The UI's **Reset demo** action asks for confirmation before invoking the endpoint.
-- `GET /api/alerts/{alert_id}/siem` returns a normalized SIEM/webhook JSON event for one alert.
-- Evaluation normalizes host casing when comparing scenario steps with `data/scenarios/*.json` ground truth.
 - The first three decoys have explicit breadcrumb names for WS-01 credential note, JMP-01 SSH config, and DB-01 backup dump.
 - Benign scenario timeline F1 is `null` (display as n/a), because the benign control has no positive attack timeline.
 
-## Verification notes
+## Honey-credential login
 
-Backend tests are run with `cd backend && PYTHONPATH=. pytest -q`. Frontend installation/build status and errors are recorded in `FRONTEND_BUILD_RESULTS.md`. All activity remains synthetic and local.
+`GET/POST /admin` on WEB-01 is a fictional admin login page. It accepts only credentials that exist inside a deployed decoy. A matching login records a `credential_used` auth event, links the decoy token, stitches the actor session, and raises a high-confidence alert. Any other login is rejected with a generic message and logged as a low-severity event. No real authentication, shell, or network calls are made.
 
+In Intruder Play, use the **Login to admin portal** action with credentials discovered in a synthetic note to trigger the honey-credential flow and observe the alert in the live security monitor.
 
 ## Decorative 3D welcome hero
-The Phase 9 backend/API fixes are retained in this merged build. The Route A React Three Fiber hero is lazy-loaded on the welcome splash; the splash dismissal is remembered for the current browser session. The live operational topology remains Cytoscape. A static fallback is shown when WebGL is unavailable.
 
-Optional Route B: install Blender 3.6+ and run `blender --background --python tools/blender/generate_hero.py`. The script supports Blender 3.6/4.x emission socket names and exports meshes only; Three.js supplies runtime lighting. The GLB is not bundled until generated locally.
+The welcome splash uses a React Three Fiber scene (`HeroScene.tsx`) rendering a seven-node rotating network island. A static CSS fallback is shown when WebGL is unavailable. The live operational topology in Live Network uses Cytoscape and is unaffected by the hero scene.
 
 ## Adaption SDK integration and evidence
 
-MirageNet now uses the official `adaption` Python SDK (`datasets.invent`, `datasets.get`, `datasets.download`, and `datasets.get_evaluation`) when `ADAPTION_API_KEY` is set in the backend environment. The exact Northwind Logistics brief is stored in `data/adaption_evidence/brief.txt`. Run **Adaption · Invent a Dataset** in Decoy Lab to start a 200-row job; run **Generate labelled sessions** to create session trajectories for the Evaluation Lab black-box replay button. Dataset IDs, row counts, evaluation status, and evaluation metrics are written to `data/adaption_evidence/job_manifest.json`.
+MirageNet uses the official `adaption` Python SDK (`datasets.invent`, `datasets.get`, `datasets.download`, and `datasets.get_evaluation`) when `ADAPTION_API_KEY` is set in the backend environment. The exact Northwind Logistics brief is stored in `data/adaption_evidence/brief.txt`. Dataset IDs, row counts, evaluation status, and evaluation metrics are written to `data/adaption_evidence/job_manifest.json`.
 
-Without an API key, the UI clearly labels the path as **CACHE**. `data/decoys.jsonl` is a filtered cache built from the uploaded prompt/completion export. Its row scores use a transparent local quality rubric because that export does not carry verifiable Adaption job metadata or per-row Adaption scores. Adaption's returned dataset-level evaluation score is displayed separately and is never copied onto every row as if it were a row-level score. The Decoy Lab accepts a real PNG/JPEG screenshot of the Adaption job UI and stores it in `data/adaption_evidence/`; the screenshot must be captured from the real provider UI, not fabricated.
+Without an API key, the UI clearly labels the path as **CACHE**. `data/decoys.jsonl` is a filtered cache built from the uploaded prompt/completion export. Its row scores use a transparent local quality rubric because that export does not carry verifiable Adaption job metadata or per-row Adaption scores.
 
-For a live run, set `ADAPTION_API_KEY` in the backend process environment (do not commit the key), restart the backend, then click the Adaption job button. The provider may consume credits. If the key is absent, no live job is started. For reproducible offline evaluation, use the labelled local session fixtures and **Replay session dataset**. Evaluation reports event-derived timeline F1, actual TF-IDF cosine ranking against the attacker query set, per-scenario metrics, latency buckets, and a run-level confusion matrix. The deliberately imperfect scenarios include a missing step, an extra benign step, and reordered steps; benign controls include scanner, backup, health-check, and admin-login behavior.
+For a live run, set `ADAPTION_API_KEY` in the backend process environment (do not commit the key), restart the backend, then click the Adaption job button. For read-only inspection of an existing dataset, use:
+```bash
+cd backend
+python scripts/run_adaption_live.py --read-only 804c2643-496f-4951-9ff8-f7814c73071b
+```
 
-## Phase 5 differentiators
+For reproducible offline evaluation, use the labelled local session fixtures and **Replay session dataset** in Evaluation Lab.
 
-This build adds two evidence-backed differentiators: high-confidence synthetic decoy auto burn-and-rotate (threshold 0.80, replacement token shown in Live Alerts) and ATT&CK-sequence adversary-playbook replay. See `PHASE5_INNOVATION.md` for behavior, provenance, and verification details. Both operate only on fictional MirageNet data.
+## Honest limitations
+
+- Adaption invent jobs were not completed locally due to API credit constraints (402 responses). The dataset ID `804c2643-496f-4951-9ff8-f7814c73071b` is user-provided evidence. Cache row quality scores are a local rubric, not Adaption row-level scores. See `data/adaption_evidence/job_manifest.json` and `backend/evidence/ADAPTION_USAGE.md` for details.
+- The executive-summary paragraph in incident reports uses a plain template by default. Set `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` in the backend environment to enable LLM generation; the template is always the fallback.
+- Auto burn-and-rotate fires at a synthetic enticement threshold of 0.80 and replaces the decoy token in Live Alerts. Both operate only on fictional MirageNet data.
+
+## Repository layout
+
+```
+MirageNet/
+├── backend/
+│   ├── app/            # FastAPI application
+│   ├── scripts/        # smoke_test.py, run_adaption_live.py
+│   ├── tests/          # pytest suite
+│   ├── evidence/       # ADAPTION_USAGE.md (referenced by backend Dockerfile)
+│   └── requirements.txt
+├── data/
+│   ├── decoys.jsonl             # decoy cache (source of truth)
+│   ├── network.json             # topology
+│   ├── org_profiles/            # Northwind Logistics profile
+│   ├── scenarios/               # ground-truth evaluation scenarios
+│   └── adaption_evidence/       # Adaption SDK evidence artefacts
+├── evidence/           # smoke results, screenshots, SIEM sample
+├── frontend/
+│   ├── src/            # React + TypeScript UI
+│   ├── index.html
+│   ├── vite.config.ts
+│   └── .env.example    # VITE_API_BASE_URL, VITE_WS_BASE_URL
+├── .env.example        # ADAPTION_API_KEY, DATABASE_URL, CORS_ORIGINS, etc.
+├── Dockerfile          # root build (backend + data, used by Render)
+├── docker-compose.yml
+├── render.yaml
+├── railway.json
+└── start.sh / start.ps1
+```
