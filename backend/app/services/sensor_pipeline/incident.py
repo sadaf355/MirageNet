@@ -26,7 +26,8 @@ def attach_event_to_incident(db, session_id, run_id, event, alert, severity):
     for item in timeline:
         ev = item.get('evidence') or {}
         for edge in ev.get('observed_edges', []) + ev.get('inferred_hops', []):
-            edge = {**edge, "evidence_event_ids": [edge.get('evidence_event_id') or item['id']], "evidence_type": "observed" if edge.get('edge_type') == 'observed' else "inferred"}
+            basis = edge.get('basis') or ("observed_transition" if edge.get('edge_type') == 'observed' else "topology_shortest_path_inference")
+            edge = {**edge, "basis": basis, "evidence_event_ids": [edge.get('evidence_event_id') or item['id']], "evidence_type": "observed" if edge.get('edge_type') == 'observed' else "inferred"}
             if not any(e.get('source') == edge.get('source') and e.get('target') == edge.get('target') and e.get('evidence_type') == edge.get('evidence_type') for e in edges): edges.append(edge)
     # Credential scenario mappings are tied to persisted event evidence.
     techniques = list(story.get('attack_techniques', []))
