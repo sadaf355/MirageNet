@@ -2,7 +2,7 @@ services:
   - type: web
     name: miragenet-backend
     runtime: docker
-    dockerfilePath: backend/Dockerfile
+    dockerfilePath: ./Dockerfile
     dockerContext: .
     plan: free
     region: oregon
