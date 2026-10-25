@@ -1,0 +1,28 @@
+{
+  "scenario": "benign-backup-noise",
+  "source": "MirageNet synthetic ground truth",
+  "ordered": true,
+  "steps": [
+    {
+      "step_index": 0,
+      "event_type": "endpoint_activity",
+      "host": "BKP-01",
+      "action": "health_check",
+      "technique": "T1041"
+    },
+    {
+      "step_index": 1,
+      "event_type": "endpoint_activity",
+      "host": "FS-01",
+      "action": "backup_status",
+      "technique": "T1041"
+    },
+    {
+      "step_index": 2,
+      "event_type": "endpoint_activity",
+      "host": "BKP-01",
+      "action": "backup_complete",
+      "technique": "T1041"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "scenario": "imperfect-missed-step",
+  "ground_truth": "malicious",
+  "steps": [
+    {
+      "event_type": "file_read",
+      "host": "WS-01",
+      "action": "read",
+      "technique": "T1005"
+    },
+    {
+      "event_type": "auth_attempt",
+      "host": "JMP-01",
+      "action": "credential_use",
+      "technique": "T1078"
+    },
+    {
+      "event_type": "simulated_ssh",
+      "host": "DB-01",
+      "action": "simulated_ssh",
+      "technique": "T1078"
+    }
+  ]
+}

@@ -1,0 +1,251 @@
+{
+  "project": "MirageNet",
+  "verification_type": "isolated backend API smoke test",
+  "generated_at_utc": "2026-10-25T07:08:52.319585+00:00",
+  "database": "temporary SQLite database; project database not modified",
+  "result": "PASS",
+  "checks_passed": 8,
+  "checks_failed": 0,
+  "checks": [
+    {
+      "check": "health",
+      "status": "pass"
+    },
+    {
+      "check": "forge_60_unique_tokens_five_types_three_step_breadcrumb",
+      "status": "pass"
+    },
+    {
+      "check": "deploy_60",
+      "status": "pass"
+    },
+    {
+      "check": "play_read_body_sensor_event_and_alert",
+      "status": "pass"
+    },
+    {
+      "check": "all_four_scenarios_and_ordered_ground_truth_f1",
+      "status": "pass"
+    },
+    {
+      "check": "incident_reconstruction_and_md_json_exports",
+      "status": "pass"
+    },
+    {
+      "check": "burn_and_fresh_token_rotation",
+      "status": "pass"
+    },
+    {
+      "check": "evaluation_metrics",
+      "status": "pass"
+    }
+  ],
+  "forge": {
+    "created": 60,
+    "unique_tokens": 60,
+    "types": [
+      "api_artifact",
+      "config",
+      "credential_note",
+      "database",
+      "finance_hr"
+    ],
+    "source_mode": "local_synthetic_fallback"
+  },
+  "scenarios": [
+    {
+      "scenario": "insider-data-theft",
+      "ground_truth": "malicious",
+      "events_emitted": 3,
+      "alerts_emitted": 3,
+      "observed_detection_rate": 1.0,
+      "timeline_step_f1": 1.0,
+      "time_to_first_alert_seconds": 0.00418,
+      "benign_high_severity_alerts": 0
+    },
+    {
+      "scenario": "credential-lateral-movement",
+      "ground_truth": "malicious",
+      "events_emitted": 3,
+      "alerts_emitted": 3,
+      "observed_detection_rate": 1.0,
+      "timeline_step_f1": 1.0,
+      "time_to_first_alert_seconds": 0.003832,
+      "benign_high_severity_alerts": 0
+    },
+    {
+      "scenario": "slow-scan-theft",
+      "ground_truth": "malicious",
+      "events_emitted": 3,
+      "alerts_emitted": 3,
+      "observed_detection_rate": 1.0,
+      "timeline_step_f1": 1.0,
+      "time_to_first_alert_seconds": 0.00362,
+      "benign_high_severity_alerts": 0
+    },
+    {
+      "scenario": "benign-backup-noise",
+      "ground_truth": "benign",
+      "events_emitted": 3,
+      "alerts_emitted": 0,
+      "observed_detection_rate": null,
+      "timeline_step_f1": 1.0,
+      "time_to_first_alert_seconds": null,
+      "benign_high_severity_alerts": 0
+    }
+  ],
+  "evaluation": {
+    "mode": "observed_synthetic_runs_only",
+    "targets": {
+      "detection_rate": 1.0,
+      "timeline_step_f1": 0.9,
+      "benign_high_severity_alerts": 0,
+      "time_to_first_alert_seconds": 1.0,
+      "enticement_top10_pass_rate": 0.7
+    },
+    "measured": {
+      "runs_total": 5,
+      "malicious_runs": 0,
+      "benign_runs": 0,
+      "mean_observed_detection_rate": null,
+      "event_level_precision": 0.0,
+      "event_level_recall": 0.0,
+      "timeline_step_f1": 0.0,
+      "benign_high_severity_alerts": 0,
+      "time_to_first_alert_seconds": null,
+      "enticement_top10_pass_rate": 1.0
+    },
+    "enticement_queries": {
+      "credentials": {
+        "top_10_count": 10,
+        "target_type_hits": 10,
+        "pass": true,
+        "ranked_decoy_ids": [
+          "decoy-679b9466ab7c",
+          "decoy-c638c3170e6f",
+          "decoy-9dcb441122fd",
+          "decoy-f33f8f3e739d",
+          "decoy-990377752c4f",
+          "decoy-d1b42a5ff8a6",
+          "decoy-d188ecb851de",
+          "decoy-cad6138440c2",
+          "decoy-3d8e392170b6",
+          "decoy-4b8ecdd59928"
+        ]
+      },
+      "finance_data": {
+        "top_10_count": 10,
+        "target_type_hits": 10,
+        "pass": true,
+        "ranked_decoy_ids": [
+          "decoy-ce9fa89e295a",
+          "decoy-a9d631bb4239",
+          "decoy-820fa927a6b3",
+          "decoy-c37249443a2d",
+          "decoy-2deb6b4fcff2",
+          "decoy-199e41f295c6",
+          "decoy-e9a9a029e6ad",
+          "decoy-bd8ce453d645",
+          "decoy-3127eb7b832e",
+          "decoy-a77f2b013966"
+        ]
+      },
+      "configuration_and_api": {
+        "top_10_count": 10,
+        "target_type_hits": 10,
+        "pass": true,
+        "ranked_decoy_ids": [
+          "decoy-698a4c6a7832",
+          "decoy-9118a34b38b9",
+          "decoy-922011fa9609",
+          "decoy-030bee78f691",
+          "decoy-70c54ddb9cd0",
+          "decoy-0819186bb94d",
+          "decoy-c527e7c5b7b8",
+          "decoy-d9dcbdc8e9f9",
+          "decoy-17327d9be611",
+          "decoy-03ba6a6f1175"
+        ]
+      }
+    },
+    "runs": [
+      {
+        "run_id": "run-79bd58743358",
+        "scenario": "credential-lateral-movement",
+        "ground_truth": null,
+        "events": 3,
+        "true_positive_events": 0,
+        "false_positive_events": 3,
+        "missed_positive_events": 0,
+        "observed_detection_rate": null,
+        "timeline_step_f1": null,
+        "benign_high_severity_alerts": 0,
+        "time_to_first_alert_seconds": null
+      },
+      {
+        "run_id": "run-72db00444f44",
+        "scenario": "slow-scan-theft",
+        "ground_truth": null,
+        "events": 3,
+        "true_positive_events": 0,
+        "false_positive_events": 3,
+        "missed_positive_events": 0,
+        "observed_detection_rate": null,
+        "timeline_step_f1": null,
+        "benign_high_severity_alerts": 0,
+        "time_to_first_alert_seconds": null
+      },
+      {
+        "run_id": "run-4dd7a1d1d898",
+        "scenario": "insider-data-theft",
+        "ground_truth": null,
+        "events": 3,
+        "true_positive_events": 0,
+        "false_positive_events": 3,
+        "missed_positive_events": 0,
+        "observed_detection_rate": null,
+        "timeline_step_f1": null,
+        "benign_high_severity_alerts": 0,
+        "time_to_first_alert_seconds": null
+      },
+      {
+        "run_id": "run-27518ca6cb9a",
+        "scenario": "benign-backup-noise",
+        "ground_truth": null,
+        "events": 3,
+        "true_positive_events": 0,
+        "false_positive_events": 0,
+        "missed_positive_events": 0,
+        "observed_detection_rate": null,
+        "timeline_step_f1": null,
+        "benign_high_severity_alerts": 0,
+        "time_to_first_alert_seconds": null
+      },
+      {
+        "run_id": "run-1d1bac459eda",
+        "scenario": "credential-lateral-movement",
+        "ground_truth": null,
+        "events": 3,
+        "true_positive_events": 0,
+        "false_positive_events": 3,
+        "missed_positive_events": 0,
+        "observed_detection_rate": null,
+        "timeline_step_f1": null,
+        "benign_high_severity_alerts": 0,
+        "time_to_first_alert_seconds": null
+      }
+    ],
+    "notes": [
+      "Targets are acceptance criteria, not measured values.",
+      "F1 is event/step-level precision-recall over persisted synthetic scenario events; it is not a real-world efficacy estimate.",
+      "Latency measures scenario-run wall-clock time from run start to first generated alert; it is not sensor-to-alert production latency.",
+      "Enticement ranking is a deterministic heuristic over synthetic decoy types and scores, not an external attacker study.",
+      "All scenarios are synthetic and run locally; repeat from a clean database for comparable evaluation."
+    ]
+  },
+  "limitations": [
+    "This is an API-level synthetic simulator smoke test, not browser-level end-to-end testing.",
+    "Adaption vendor compatibility is not verified unless a documented compatible gateway is configured.",
+    "Metrics are generated from synthetic scenarios and are not real-world detection efficacy claims."
+  ]
+}

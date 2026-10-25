@@ -1,0 +1,30 @@
+{
+  "scenario": "noisy-partial-intrusion",
+  "label": "malicious",
+  "steps": [
+    {
+      "event_type": "endpoint_activity",
+      "host": "WEB-01",
+      "action": "banner_probe",
+      "technique": "T1083"
+    },
+    {
+      "event_type": "file_enumeration",
+      "host": "WS-01",
+      "action": "enumerate",
+      "technique": "T1083"
+    },
+    {
+      "event_type": "file_read",
+      "host": "FS-01",
+      "action": "read",
+      "technique": "T1005"
+    },
+    {
+      "event_type": "endpoint_activity",
+      "host": "BKP-01",
+      "action": "health_check",
+      "technique": "T1041"
+    }
+  ]
+}

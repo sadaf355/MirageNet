@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: miragenet-backend
+    runtime: docker
+    dockerfilePath: backend/Dockerfile
+    dockerContext: .
+    plan: free
+    region: oregon
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        value: sqlite:////var/data/miragenet.db
+      - key: CORS_ORIGINS
+        value: "*"
+      - key: ADAPTION_API_KEY
+        sync: false
+    disk:
+      name: miragenet-data
+      mountPath: /var/data
+      sizeGB: 1
